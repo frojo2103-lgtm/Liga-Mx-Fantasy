@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Fantasy Liga MX</title>
+<meta name="description" content="Liga fantasy privada de la Liga MX">
+<meta name="theme-color" content="#1F5F3A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Fantasy MX">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>Fantasy Liga MX</h1>
+      <p class="sub">Apertura 2026 · reglas de LaLiga Fantasy sin nota DAZN</p>
+    </div>
+    <div style="display:grid;gap:8px;justify-items:end"><div id="role" class="row" hidden></div><div id="status"></div></div>
+  </header>
+  <nav class="tabs" id="tabs" role="tablist" aria-label="Secciones"></nav>
+  <main id="view" aria-live="polite">
+    <div class="empty">Cargando plantillas, mercado y clasificación…</div>
+  </main>
+</div>
+<div id="toast" role="status" hidden></div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
