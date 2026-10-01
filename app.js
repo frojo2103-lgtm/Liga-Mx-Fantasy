@@ -392,10 +392,10 @@ var A={
   'revoke-ask':function(b){ui.confirm='revoke:'+b.dataset.u},
   reject:async function(b){await q(sb.from('members').update({status:'rejected'}).eq('user_id',b.dataset.u));ui.confirm=null;toast('Acceso quitado.')},
   seed:async function(){
-    toast('Descargando jugadores…');var P1=await (await fetch('seed/players.json',{cache:'no-store'})).json();
+    toast('Descargando jugadores…');var P1=await (await fetch('players.json',{cache:'no-store'})).json();
     var rows=P1.map(function(p){var ex=S.players[p.id];return {id:p.id,name:p.name,team:p.team,pos:p.pos,num:p.num,value:p.value,owner:ex?ex.owner:null,clause:ex?ex.clause:null,signed_at:ex?ex.signedAt:null}});
     for(var i=0;i<rows.length;i+=200){await q(sb.from('players').upsert(rows.slice(i,i+200)));toast('Jugadores '+Math.min(i+200,rows.length)+' de '+rows.length)}
-    toast('Descargando fotos…');var PH=await (await fetch('seed/photos.json',{cache:'no-store'})).json();var ids=Object.keys(PH);
+    toast('Descargando fotos…');var PH=await (await fetch('photos.json',{cache:'no-store'})).json();var ids=Object.keys(PH);
     for(var k=0;k<ids.length;k+=40){await q(sb.from('photos').upsert(ids.slice(k,k+40).map(function(id){return {id:id,src:PH[id]}})));toast('Fotos '+Math.min(k+40,ids.length)+' de '+ids.length)}
     toast('Listo: '+rows.length+' jugadores y '+ids.length+' fotos.')},
   import:async function(){var txt=val('imp');var lines=txt.split(/\r?\n/).map(function(l){return l.trim()}).filter(Boolean);var ok=0,upd=0,bad=[];
