@@ -1,5 +1,0 @@
-{
-  "headers": [
-    { "source": "/(app.js|config.js|styles.css|index.html|sw.js)", "headers": [{ "key": "Cache-Control", "value": "no-cache" }] }
-  ]
-}
