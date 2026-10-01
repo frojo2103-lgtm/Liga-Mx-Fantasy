@@ -84,7 +84,9 @@ function doRender(){
   else if(ui.tab==='admin'&&isAdmin())html=vAdmin();
   view.innerHTML=html;
 }
-function renderStatus(){
+function renderBrand(){var c=cfg();var n=c.appName||'Fantasy Liga MX',d=(c.appDesc==null?'Apertura 2026':c.appDesc);
+  var a=document.getElementById('appName'),b=document.getElementById('appDesc');if(a&&a.textContent!==n)a.textContent=n;if(b){if(b.textContent!==d)b.textContent=d;b.hidden=!d}if(document.title!==n)document.title=n}
+function renderStatus(){renderBrand();
   var rb=document.getElementById('role');
   if(rb){if(!S.ready||S.phase!=='app'){rb.hidden=true}else{rb.hidden=false;
     rb.innerHTML='<span class="rolechip'+(isAdmin()?' adm':'')+'">'+(isAdmin()?'Administrador':'Jugador')+'</span>'+(S.owner?'<button type="button" class="btn sm" id="roleToggle">'+(ui.asPlayer?'Volver a administrador':'Ver como jugador')+'</button>':'')+'<button type="button" class="btn sm" id="logout">Salir</button>'}}
@@ -327,6 +329,7 @@ function aLiga(){
       (ui.confirm==='kick:'+u?'<button class="btn sm danger armed" data-act="kick" data-u="'+u+'">Sí, sacar</button><button class="btn sm" data-act="cancel">No</button>':'<button class="btn sm danger" data-act="kick-ask" data-u="'+u+'">Sacar</button>')+'</div></div>'}).join('')+'</div>':'<p class="muted">Nadie se ha unido. Comparte la página y que cada quien entre desde "Mi equipo".</p>')+'</div>';
   out+='<div class="card"><h3>Reglas de la liga</h3><div class="row">'+num('c-start','Caja inicial ($M)',c.startCash,'0.1')+num('c-pv','$M por punto',c.pointValue,'0.01')+num('c-mk','Jugadores en mercado',c.marketSize)+num('c-max','Plantilla máxima',c.maxSquad)+num('c-lock','Días de protección',c.lockDays)+num('c-cr','Costo subir cláusula (0–1)',c.clauseRaise,'0.05')+num('c-qs','Venta rápida (fracción del valor)',c.quickSale,'0.05')+'</div>'+
     '<p class="small muted">Plantilla inicial por posición</p><div class="row">'+num('c-sPT','PT',c.squad.PT)+num('c-sDF','DF',c.squad.DF)+num('c-sMC','MC',c.squad.MC)+num('c-sDC','DC',c.squad.DC)+num('c-j','Jornada actual',c.jornada)+'</div>'+
+    '<div class="row" style="margin-top:12px"><label class="f" style="flex:1 1 240px">Nombre de la liga<input type="text" id="c-name" maxlength="40" value="'+h(dv('c-name',c.appName||'Fantasy Liga MX'))+'"></label><label class="f" style="flex:2 1 300px">Descripción<input type="text" id="c-desc" maxlength="120" value="'+h(dv('c-desc',c.appDesc==null?'Apertura 2026':c.appDesc))+'"></label></div>'+
     '<label class="f" style="margin-top:12px">Equipos de la liga (uno por línea)<textarea id="c-teams" style="min-height:160px">'+h(dv('c-teams',c.teams.join('\n')))+'</textarea></label>'+
     '<div class="row" style="margin-top:10px"><button class="btn pri" data-act="cfg-save">Guardar reglas</button></div></div>';
   return out+'</div>';
@@ -430,9 +433,10 @@ var A={
   'kick-ask':function(b){ui.confirm='kick:'+b.dataset.u},
   kick:async function(b){await rpc('admin_kick',{p_user:b.dataset.u});ui.confirm=null;toast('Participante fuera; sus jugadores quedaron libres.')},
   'cfg-save':async function(){var n=function(id,d){var v=parseFloat(val(id));return isNaN(v)?d:v};var c=cfg();
+    var nm=val('c-name').trim(),ds=val('c-desc').trim();
     var teams=val('c-teams').split(/\r?\n/).map(function(s){return s.trim()}).filter(Boolean);
     await saveCfg({startCash:n('c-start',c.startCash),pointValue:n('c-pv',c.pointValue),marketSize:Math.round(n('c-mk',c.marketSize)),maxSquad:Math.round(n('c-max',c.maxSquad)),lockDays:n('c-lock',c.lockDays),clauseRaise:Math.min(1,Math.max(0,n('c-cr',c.clauseRaise))),quickSale:Math.min(1,Math.max(0,n('c-qs',c.quickSale))),
-      squad:{PT:Math.round(n('c-sPT',c.squad.PT)),DF:Math.round(n('c-sDF',c.squad.DF)),MC:Math.round(n('c-sMC',c.squad.MC)),DC:Math.round(n('c-sDC',c.squad.DC))},jornada:Math.min(JORNADAS,Math.max(1,Math.round(n('c-j',c.jornada)))),teams:teams.length?teams:c.teams});
+      squad:{PT:Math.round(n('c-sPT',c.squad.PT)),DF:Math.round(n('c-sDF',c.squad.DF)),MC:Math.round(n('c-sMC',c.squad.MC)),DC:Math.round(n('c-sDC',c.squad.DC))},jornada:Math.min(JORNADAS,Math.max(1,Math.round(n('c-j',c.jornada)))),teams:teams.length?teams:c.teams,appName:nm||c.appName||'Fantasy Liga MX',appDesc:ds});
     clearDrafts('c-');toast('Reglas guardadas.')}
 };
 function toThumb(file){return new Promise(function(res,rej){var img=new Image(),url=URL.createObjectURL(file);
